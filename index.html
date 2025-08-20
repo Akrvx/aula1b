@@ -1,18 +1,612 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=h1, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Árvores de Paracambi - Mapa Interativo</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            color: #2d5a3d;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .header p {
+            color: #5a6c5d;
+            text-align: center;
+            font-size: 1.1em;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            display: flex;
+            height: calc(100vh - 140px);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.2em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .controls {
+            margin-bottom: 25px;
+        }
+
+        .controls h3 {
+            color: #2d5a3d;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #5a6c5d;
+            font-weight: 600;
+        }
+
+        .control-group select,
+        .control-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .tree-list {
+            margin-top: 25px;
+        }
+
+        .tree-list h3 {
+            color: #2d5a3d;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .tree-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tree-item:hover {
+            background: #e8f5e8;
+            transform: translateX(5px);
+        }
+
+        .tree-species {
+            font-weight: bold;
+            color: #2d5a3d;
+            margin-bottom: 5px;
+        }
+
+        .tree-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .map-container {
+            flex: 1;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .legend {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .legend h4 {
+            color: #2d5a3d;
+            margin-bottom: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .custom-popup {
+            min-width: 250px;
+        }
+
+        .popup-header {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            margin: -10px -10px 10px -10px;
+            border-radius: 4px 4px 0 0;
+            font-weight: bold;
+        }
+
+        .popup-content {
+            line-height: 1.6;
+        }
+
+        .popup-detail {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .popup-label {
+            font-weight: 600;
+            color: #2d5a3d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Página home</h1>
-    <a href="vendas.html">Ir para a página de vendas</a>
-    <h1> VASCO</h1>
-    <h1>FLAMENGO</h1>
-    <h1>Ola FAETEC</h1>
-    <h1>Juan Rei do Python</h1>
-    <h5>Matheus come bola</h5>
-    <h1>Casa</h1>
+    <div class="header">
+        <h1>🌳 Árvores de Paracambi</h1>
+        <p>Mapa interativo da flora urbana de Paracambi/RJ. Explore, descubra e conecte-se com a natureza da nossa cidade.</p>
+    </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalTrees">1,247</span>
+                    <div class="stat-label">Árvores Mapeadas</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalSpecies">28</span>
+                    <div class="stat-label">Espécies Diferentes</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="favoriteTrees">89</span>
+                    <div class="stat-label">Árvores Favoritas</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="recentCare">156</span>
+                    <div class="stat-label">Cuidados Recentes</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <h3>🔍 Filtros</h3>
+                <div class="control-group">
+                    <label for="speciesFilter">Espécie:</label>
+                    <select id="speciesFilter">
+                        <option value="">Todas as espécies</option>
+                        <option value="pau-brasil">Pau-Brasil</option>
+                        <option value="ipê-amarelo">Ipê Amarelo</option>
+                        <option value="quaresmeira">Quaresmeira</option>
+                        <option value="jacarandá">Jacarandá</option>
+                        <option value="flamboyant">Flamboyant</option>
+                        <option value="palmeira-imperial">Palmeira Imperial</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="sizeFilter">Tamanho:</label>
+                    <select id="sizeFilter">
+                        <option value="">Todos os tamanhos</option>
+                        <option value="pequeno">Pequeno (< 5m)</option>
+                        <option value="medio">Médio (5-15m)</option>
+                        <option value="grande">Grande (> 15m)</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label for="healthFilter">Condição:</label>
+                    <select id="healthFilter">
+                        <option value="">Todas as condições</option>
+                        <option value="excelente">Excelente</option>
+                        <option value="boa">Boa</option>
+                        <option value="regular">Regular</option>
+                        <option value="cuidados">Precisa de Cuidados</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h4>📍 Legenda do Mapa</h4>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4CAF50;"></div>
+                    <span>Condição Excelente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #8BC34A;"></div>
+                    <span>Condição Boa</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFC107;"></div>
+                    <span>Condição Regular</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF5722;"></div>
+                    <span>Precisa de Cuidados</span>
+                </div>
+            </div>
+
+            <div class="tree-list">
+                <h3>🌿 Árvores Próximas</h3>
+                <div id="nearbyTrees">
+                    <!-- As árvores próximas serão listadas aqui -->
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <script>
+        // Coordenadas de Paracambi/RJ
+        const PARACAMBI_CENTER = [-22.6063, -43.7086];
+        
+        // Inicializar o mapa
+        const map = L.map('map').setView(PARACAMBI_CENTER, 14);
+        
+        // Adicionar camada de tiles do OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Dados simulados de árvores (em um projeto real, isso viria de uma API)
+        const treesData = [
+            {
+                id: 1,
+                species: 'Pau-Brasil',
+                scientificName: 'Paubrasilia echinata',
+                lat: -22.6063,
+                lng: -43.7086,
+                height: 12,
+                condition: 'excelente',
+                age: 15,
+                address: 'Praça Central'
+            },
+            {
+                id: 2,
+                species: 'Ipê Amarelo',
+                scientificName: 'Handroanthus chrysanthus',
+                lat: -22.6073,
+                lng: -43.7096,
+                height: 8,
+                condition: 'boa',
+                age: 10,
+                address: 'Rua das Flores, 123'
+            },
+            {
+                id: 3,
+                species: 'Quaresmeira',
+                scientificName: 'Tibouchina granulosa',
+                lat: -22.6053,
+                lng: -43.7076,
+                height: 6,
+                condition: 'regular',
+                age: 8,
+                address: 'Avenida Principal, 456'
+            },
+            {
+                id: 4,
+                species: 'Jacarandá',
+                scientificName: 'Jacaranda mimosifolia',
+                lat: -22.6083,
+                lng: -43.7106,
+                height: 18,
+                condition: 'excelente',
+                age: 25,
+                address: 'Parque Municipal'
+            },
+            {
+                id: 5,
+                species: 'Flamboyant',
+                scientificName: 'Delonix regia',
+                lat: -22.6043,
+                lng: -43.7066,
+                height: 15,
+                condition: 'boa',
+                age: 20,
+                address: 'Praça da Igreja'
+            },
+            {
+                id: 6,
+                species: 'Palmeira Imperial',
+                scientificName: 'Roystonea oleracea',
+                lat: -22.6093,
+                lng: -43.7116,
+                height: 22,
+                condition: 'cuidados',
+                age: 30,
+                address: 'Entrada da Cidade'
+            }
+        ];
+
+        // Cores baseadas na condição da árvore
+        const conditionColors = {
+            'excelente': '#4CAF50',
+            'boa': '#8BC34A',
+            'regular': '#FFC107',
+            'cuidados': '#FF5722'
+        };
+
+        // Função para criar marcadores
+        function createTreeMarker(tree) {
+            const color = conditionColors[tree.condition];
+            const size = Math.min(Math.max(tree.height * 2, 15), 30);
+            
+            const marker = L.circleMarker([tree.lat, tree.lng], {
+                radius: size / 2,
+                fillColor: color,
+                color: 'white',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+
+            // Popup personalizado
+            const popupContent = `
+                <div class="custom-popup">
+                    <div class="popup-header">${tree.species}</div>
+                    <div class="popup-content">
+                        <div class="popup-detail">
+                            <span class="popup-label">Nome Científico:</span>
+                            <span><em>${tree.scientificName}</em></span>
+                        </div>
+                        <div class="popup-detail">
+                            <span class="popup-label">Altura:</span>
+                            <span>${tree.height}m</span>
+                        </div>
+                        <div class="popup-detail">
+                            <span class="popup-label">Idade:</span>
+                            <span>${tree.age} anos</span>
+                        </div>
+                        <div class="popup-detail">
+                            <span class="popup-label">Condição:</span>
+                            <span style="color: ${color}; font-weight: bold;">${tree.condition.charAt(0).toUpperCase() + tree.condition.slice(1)}</span>
+                        </div>
+                        <div class="popup-detail">
+                            <span class="popup-label">Localização:</span>
+                            <span>${tree.address}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(popupContent, {
+                maxWidth: 300,
+                className: 'custom-popup-container'
+            });
+
+            return marker;
+        }
+
+        // Adicionar marcadores ao mapa
+        let treeMarkers = [];
+        treesData.forEach(tree => {
+            const marker = createTreeMarker(tree);
+            marker.addTo(map);
+            treeMarkers.push(marker);
+        });
+
+        // Função para filtrar árvores
+        function filterTrees() {
+            const speciesFilter = document.getElementById('speciesFilter').value;
+            const sizeFilter = document.getElementById('sizeFilter').value;
+            const healthFilter = document.getElementById('healthFilter').value;
+
+            treeMarkers.forEach((marker, index) => {
+                const tree = treesData[index];
+                let show = true;
+
+                if (speciesFilter && tree.species.toLowerCase().includes(speciesFilter) === false) {
+                    show = false;
+                }
+
+                if (sizeFilter) {
+                    if (sizeFilter === 'pequeno' && tree.height >= 5) show = false;
+                    if (sizeFilter === 'medio' && (tree.height < 5 || tree.height > 15)) show = false;
+                    if (sizeFilter === 'grande' && tree.height <= 15) show = false;
+                }
+
+                if (healthFilter && tree.condition !== healthFilter) {
+                    show = false;
+                }
+
+                if (show) {
+                    map.addLayer(marker);
+                } else {
+                    map.removeLayer(marker);
+                }
+            });
+
+            updateNearbyTreesList();
+        }
+
+        // Adicionar event listeners aos filtros
+        document.getElementById('speciesFilter').addEventListener('change', filterTrees);
+        document.getElementById('sizeFilter').addEventListener('change', filterTrees);
+        document.getElementById('healthFilter').addEventListener('change', filterTrees);
+
+        // Função para atualizar lista de árvores próximas
+        function updateNearbyTreesList() {
+            const nearbyTreesDiv = document.getElementById('nearbyTrees');
+            nearbyTreesDiv.innerHTML = '';
+
+            // Mostrar as primeiras 5 árvores como exemplo
+            treesData.slice(0, 5).forEach(tree => {
+                const treeItem = document.createElement('div');
+                treeItem.className = 'tree-item';
+                treeItem.innerHTML = `
+                    <div class="tree-species">${tree.species}</div>
+                    <div class="tree-details">
+                        ${tree.address} • ${tree.height}m • ${tree.condition}
+                    </div>
+                `;
+                
+                treeItem.addEventListener('click', () => {
+                    map.setView([tree.lat, tree.lng], 18);
+                    // Encontrar e abrir o popup correspondente
+                    treeMarkers[treesData.indexOf(tree)].openPopup();
+                });
+                
+                nearbyTreesDiv.appendChild(treeItem);
+            });
+        }
+
+        // Inicializar lista de árvores próximas
+        updateNearbyTreesList();
+
+        // Adicionar controle de escala
+        L.control.scale({
+            metric: true,
+            imperial: false,
+            position: 'bottomright'
+        }).addTo(map);
+
+        // Efeito de hover nos marcadores
+        treeMarkers.forEach(marker => {
+            marker.on('mouseover', function(e) {
+                this.setStyle({
+                    weight: 3,
+                    fillOpacity: 1
+                });
+            });
+            
+            marker.on('mouseout', function(e) {
+                this.setStyle({
+                    weight: 2,
+                    fillOpacity: 0.8
+                });
+            });
+        });
+
+        // Atualizar estatísticas dinamicamente
+        function updateStats() {
+            const visibleTrees = treeMarkers.filter(marker => map.hasLayer(marker));
+            document.getElementById('totalTrees').textContent = visibleTrees.length.toLocaleString();
+            
+            // Simular outras estatísticas
+            document.getElementById('totalSpecies').textContent = Math.min(28, Math.ceil(visibleTrees.length / 5));
+            document.getElementById('favoriteTrees').textContent = Math.ceil(visibleTrees.length * 0.07);
+            document.getElementById('recentCare').textContent = Math.ceil(visibleTrees.length * 0.12);
+        }
+
+        // Event listener para mudanças no mapa
+        map.on('zoomend moveend', updateStats);
+        
+        // Inicializar estatísticas
+        updateStats();
+    </script>
 </body>
 </html>
