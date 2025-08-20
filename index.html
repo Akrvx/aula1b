@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Árvores de Paracambi - Mapa Interativo</title>
     
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     
     <style>
@@ -27,21 +28,108 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: relative;
             z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-content {
+            flex: 1;
+            text-align: center;
         }
 
         .header h1 {
             color: #2d5a3d;
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-align: center;
         }
 
         .header p {
             color: #5a6c5d;
-            text-align: center;
             font-size: 1.1em;
             max-width: 800px;
             margin: 0 auto;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .auth-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .btn-login:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #2d5a3d;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: #666;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #f5f5f5;
+            border-color: #999;
         }
 
         .container {
@@ -248,13 +336,248 @@
             .map-container {
                 height: 400px;
             }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .auth-buttons {
+                justify-content: center;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            padding: 0;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .modal-subtitle {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d5a3d;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group input.error {
+            border-color: #f44336;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group input.error + .error-message {
+            display: block;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-submit:hover {
+            background: linear-gradient(135deg, #45a049, #3d8b40);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .form-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .form-switch a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🌳 Árvores de Paracambi</h1>
-        <p>Mapa interativo da flora urbana de Paracambi/RJ. Explore, descubra e conecte-se com a natureza da nossa cidade.</p>
+        <div class="header-content">
+            <h1>🌳 Árvores de Paracambi</h1>
+            <p>Mapa interativo da flora urbana de Paracambi/RJ. Explore, descubra e conecte-se com a natureza da nossa cidade.</p>
+        </div>
+        <div class="auth-section">
+            <div class="auth-buttons" id="authButtons">
+                <button class="auth-button btn-login" onclick="openModal('loginModal')">Entrar</button>
+                <button class="auth-button btn-register" onclick="openModal('registerModal')">Criar Conta</button>
+            </div>
+            <div class="user-info" id="userInfo" style="display: none;">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div class="user-name" id="userName"></div>
+                <button class="btn-logout" onclick="logout()">Sair</button>
+            </div>
+        </div>
     </div>
 
     <div class="container">
@@ -343,6 +666,84 @@
 
         <div class="map-container">
             <div id="map"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Login -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal('loginModal')">&times;</span>
+                <h2 class="modal-title">Bem-vindo de volta!</h2>
+                <p class="modal-subtitle">Faça login para continuar explorando</p>
+            </div>
+            <div class="modal-body">
+                <div class="success-message" id="loginSuccess"></div>
+                <div class="loading" id="loginLoading">
+                    <div class="spinner"></div>
+                    <p>Fazendo login...</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail:</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                        <div class="error-message">Por favor, insira um e-mail válido</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha:</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                        <div class="error-message">A senha deve ter pelo menos 6 caracteres</div>
+                    </div>
+                    <button type="submit" class="form-submit">Entrar</button>
+                </form>
+                <div class="form-switch">
+                    <p>Não tem uma conta? <a onclick="switchModal('loginModal', 'registerModal')">Criar conta</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Registro -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal('registerModal')">&times;</span>
+                <h2 class="modal-title">Junte-se a nós!</h2>
+                <p class="modal-subtitle">Crie sua conta e faça parte da comunidade</p>
+            </div>
+            <div class="modal-body">
+                <div class="success-message" id="registerSuccess"></div>
+                <div class="loading" id="registerLoading">
+                    <div class="spinner"></div>
+                    <p>Criando conta...</p>
+                </div>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerName">Nome completo:</label>
+                        <input type="text" id="registerName" name="name" required>
+                        <div class="error-message">Nome deve ter pelo menos 2 caracteres</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">E-mail:</label>
+                        <input type="email" id="registerEmail" name="email" required>
+                        <div class="error-message">Por favor, insira um e-mail válido</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Senha:</label>
+                        <input type="password" id="registerPassword" name="password" required>
+                        <div class="error-message">A senha deve ter pelo menos 6 caracteres</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerConfirmPassword">Confirmar senha:</label>
+                        <input type="password" id="registerConfirmPassword" name="confirmPassword" required>
+                        <div class="error-message">As senhas não coincidem</div>
+                    </div>
+                    <button type="submit" class="form-submit">Criar Conta</button>
+                </form>
+                <div class="form-switch">
+                    <p>Já tem uma conta? <a onclick="switchModal('registerModal', 'loginModal')">Fazer login</a></p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -607,6 +1008,313 @@
         
         // Inicializar estatísticas
         updateStats();
+
+        // Sistema de Autenticação
+        let currentUser = null;
+
+        // Dados simulados de usuários (em um projeto real, isso viria do backend)
+        const users = [];
+
+        // Função para abrir modal
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Função para fechar modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            
+            // Limpar formulários
+            const form = modal.querySelector('form');
+            if (form) {
+                form.reset();
+                clearFormErrors(form);
+            }
+        }
+
+        // Função para alternar entre modais
+        function switchModal(fromModalId, toModalId) {
+            closeModal(fromModalId);
+            setTimeout(() => openModal(toModalId), 300);
+        }
+
+        // Fechar modal ao clicar fora dele
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target.id);
+            }
+        });
+
+        // Função para validar email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Função para limpar erros do formulário
+        function clearFormErrors(form) {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.classList.remove('error');
+            });
+        }
+
+        // Função para mostrar erro em campo específico
+        function showFieldError(field) {
+            field.classList.add('error');
+        }
+
+        // Função para validar formulário de registro
+        function validateRegisterForm(formData) {
+            let isValid = true;
+            const form = document.getElementById('registerForm');
+            clearFormErrors(form);
+
+            // Validar nome
+            if (formData.name.length < 2) {
+                showFieldError(document.getElementById('registerName'));
+                isValid = false;
+            }
+
+            // Validar email
+            if (!isValidEmail(formData.email)) {
+                showFieldError(document.getElementById('registerEmail'));
+                isValid = false;
+            }
+
+            // Validar senha
+            if (formData.password.length < 6) {
+                showFieldError(document.getElementById('registerPassword'));
+                isValid = false;
+            }
+
+            // Validar confirmação de senha
+            if (formData.password !== formData.confirmPassword) {
+                showFieldError(document.getElementById('registerConfirmPassword'));
+                isValid = false;
+            }
+
+            // Verificar se email já existe
+            if (users.find(user => user.email === formData.email)) {
+                showFieldError(document.getElementById('registerEmail'));
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Função para validar formulário de login
+        function validateLoginForm(formData) {
+            let isValid = true;
+            const form = document.getElementById('loginForm');
+            clearFormErrors(form);
+
+            // Validar email
+            if (!isValidEmail(formData.email)) {
+                showFieldError(document.getElementById('loginEmail'));
+                isValid = false;
+            }
+
+            // Validar senha
+            if (formData.password.length < 6) {
+                showFieldError(document.getElementById('loginPassword'));
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Função para simular delay de requisição
+        function simulateApiDelay(ms = 1500) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Função para registrar usuário
+        async function registerUser(userData) {
+            const loadingDiv = document.getElementById('registerLoading');
+            const form = document.getElementById('registerForm');
+            const successDiv = document.getElementById('registerSuccess');
+            
+            loadingDiv.style.display = 'block';
+            form.style.display = 'none';
+
+            try {
+                // Simular requisição ao servidor
+                await simulateApiDelay();
+
+                // Adicionar usuário ao array (simulação do banco de dados)
+                const newUser = {
+                    id: users.length + 1,
+                    name: userData.name,
+                    email: userData.email,
+                    password: userData.password, // Em produção, seria hasheada
+                    createdAt: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+
+                // Mostrar mensagem de sucesso
+                successDiv.innerHTML = `
+                    <h3>🎉 Conta criada com sucesso!</h3>
+                    <p>Bem-vindo(a), ${userData.name}! Você será redirecionado para o login.</p>
+                `;
+                successDiv.style.display = 'block';
+                loadingDiv.style.display = 'none';
+
+                // Redirecionar para login após 2 segundos
+                setTimeout(() => {
+                    switchModal('registerModal', 'loginModal');
+                    successDiv.style.display = 'none';
+                    form.style.display = 'block';
+                }, 2000);
+
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                form.style.display = 'block';
+                alert('Erro ao criar conta. Tente novamente.');
+            }
+        }
+
+        // Função para fazer login
+        async function loginUser(credentials) {
+            const loadingDiv = document.getElementById('loginLoading');
+            const form = document.getElementById('loginForm');
+            const successDiv = document.getElementById('loginSuccess');
+            
+            loadingDiv.style.display = 'block';
+            form.style.display = 'none';
+
+            try {
+                // Simular requisição ao servidor
+                await simulateApiDelay();
+
+                // Verificar credenciais
+                const user = users.find(u => 
+                    u.email === credentials.email && u.password === credentials.password
+                );
+
+                if (user) {
+                    // Login bem-sucedido
+                    currentUser = user;
+                    
+                    successDiv.innerHTML = `
+                        <h3>✅ Login realizado com sucesso!</h3>
+                        <p>Bem-vindo de volta, ${user.name}!</p>
+                    `;
+                    successDiv.style.display = 'block';
+                    loadingDiv.style.display = 'none';
+
+                    // Atualizar interface
+                    setTimeout(() => {
+                        updateAuthInterface();
+                        closeModal('loginModal');
+                        successDiv.style.display = 'none';
+                        form.style.display = 'block';
+                    }, 2000);
+
+                } else {
+                    // Credenciais inválidas
+                    loadingDiv.style.display = 'none';
+                    form.style.display = 'block';
+                    showFieldError(document.getElementById('loginEmail'));
+                    showFieldError(document.getElementById('loginPassword'));
+                    alert('E-mail ou senha incorretos.');
+                }
+
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                form.style.display = 'block';
+                alert('Erro ao fazer login. Tente novamente.');
+            }
+        }
+
+        // Função para atualizar interface após login/logout
+        function updateAuthInterface() {
+            const authButtons = document.getElementById('authButtons');
+            const userInfo = document.getElementById('userInfo');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+
+            if (currentUser) {
+                // Usuário logado
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'flex';
+                userName.textContent = currentUser.name;
+                userAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
+            } else {
+                // Usuário deslogado
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        // Função para fazer logout
+        function logout() {
+            currentUser = null;
+            updateAuthInterface();
+        }
+
+        // Event listeners para os formulários
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('registerName').value.trim(),
+                email: document.getElementById('registerEmail').value.trim(),
+                password: document.getElementById('registerPassword').value,
+                confirmPassword: document.getElementById('registerConfirmPassword').value
+            };
+
+            if (validateRegisterForm(formData)) {
+                registerUser(formData);
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                email: document.getElementById('loginEmail').value.trim(),
+                password: document.getElementById('loginPassword').value
+            };
+
+            if (validateLoginForm(formData)) {
+                loginUser(formData);
+            }
+        });
+
+        // Verificar se há usuário logado ao carregar a página (simulação de sessão)
+        function checkUserSession() {
+            // Em um projeto real, verificaria o token no localStorage ou cookie
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateAuthInterface();
+            }
+        }
+
+        // Salvar sessão do usuário (simulação)
+        function saveUserSession() {
+            if (currentUser) {
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            } else {
+                localStorage.removeItem('currentUser');
+            }
+        }
+
+        // Atualizar salvamento de sessão
+        const originalUpdateAuthInterface = updateAuthInterface;
+        updateAuthInterface = function() {
+            originalUpdateAuthInterface();
+            saveUserSession();
+        };
+
+        // Verificar sessão ao carregar
+        checkUserSession();
     </script>
 </body>
 </html>
