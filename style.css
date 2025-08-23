@@ -13,18 +13,16 @@ body {
 }
 
 
-/* Navbar - header */
+/* Navbar principal */
 .header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 0.50rem 1rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1000;
     display: flex;
-    justify-content: space-between; /* mantém logo à esquerda e login à direita */
+    justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 0.75rem 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     box-sizing: border-box;
 }
 
@@ -48,10 +46,10 @@ body {
 }
 
 .header-nav {
-    flex: 1; /* ocupa espaço entre logo e botões */
+    flex: 1; /* ocupa o espaço do meio */
     display: flex;
-    justify-content: center; /* centraliza os links */
-    gap: 1rem;
+    justify-content: center; /* centraliza */
+    gap: 2rem;
 }
 
 .header-nav a {
@@ -106,22 +104,20 @@ body {
 .auth-buttons {
     display: flex;
     gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
 .auth-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 20px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
+    padding: 0.4rem 0.9rem;
     font-size: 0.85rem;
-    white-space: nowrap;
+    border-radius: 20px;
+    cursor: pointer;
 }
+
+.auth-section {
+    display: flex;
+    align-items: center;
+}
+
 
 .btn-login {
     background: transparent;
