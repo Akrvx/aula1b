@@ -31,7 +31,7 @@ body {
     margin: 0 auto;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 }
 .header-logo {
@@ -47,7 +47,7 @@ body {
 
 .header-nav {
     display: flex;
-    gap: 1rem; /* menos espaço entre os links */
+    gap: 0.6rem; /* menos espaço entre os links */
 }
 
 .header-nav a {
