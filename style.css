@@ -13,7 +13,7 @@ body {
 }
 
 
-/* Header Responsivo */
+/* Navbar - header */
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -22,8 +22,8 @@ body {
     position: relative;
     z-index: 1000;
     display: flex;
-    justify-content: space-between; /* logo à esquerda, nav no meio, login à direita */
-    align-items: center; /* garante tudo alinhado na mesma linha */
+    justify-content: space-between; /* mantém logo à esquerda e login à direita */
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
 }
@@ -48,9 +48,10 @@ body {
 }
 
 .header-nav {
+    flex: 1; /* ocupa espaço entre logo e botões */
     display: flex;
-    gap: 2rem; /* espaço entre os links */
-    margin: 0 2rem; /* espaço entre logo e botões */
+    justify-content: center; /* centraliza os links */
+    gap: 2rem;
 }
 
 .header-nav a {
@@ -110,15 +111,15 @@ body {
 }
 
 .auth-button {
-    padding: 0.75rem 1.25rem;
+    padding: 0.5rem 1rem;
     border: none;
-    border-radius: 25px;
+    border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     white-space: nowrap;
 }
 
