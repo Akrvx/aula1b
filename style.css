@@ -825,11 +825,11 @@ body {
     }
 
     .header img {
-        width: 35px; /* deixa o logo menor no celular */
+        width: 34px; /* deixa o logo menor no celular */
     }
 
     .header h1 {
-        font-size: 1.2rem; /* reduz tamanho do título */
+        font-size: 1rem; /* reduz tamanho do título */
         text-align: center;
     }
 }
