@@ -18,13 +18,14 @@ body {
     display: grid;
     grid-template-columns: auto 1fr auto; /* logo | nav centralizada | botões */
     align-items: center;
-    padding: 0.75rem 2rem;
+    padding: 0.4rem 1.5rem;   /* altura menor e menos espaço lateral */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08); /* sombra mais leve */
     width: 100%;
     box-sizing: border-box;
 }
+
 .header > div {
     max-width: 1440px;
     margin: 0 auto;
@@ -47,7 +48,7 @@ body {
 .header-nav {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem; /* menos espaço entre os links */
 }
 
 .header-nav a {
@@ -98,17 +99,16 @@ body {
     padding: 0 1rem;
 }
 
-/* Botões de Autenticação */
+/* Botões mais compactos */
 .auth-buttons {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem; /* menos espaço entre os botões */
 }
 
 .auth-button {
-    padding: 0.4rem 0.9rem;
-    font-size: 0.85rem;
-    border-radius: 20px;
-    cursor: pointer;
+    padding: 0.3rem 0.8rem; /* altura menor */
+    font-size: 0.8rem; /* texto menor */
+    border-radius: 16px;
 }
 
 .auth-section {
