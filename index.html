@@ -11,24 +11,30 @@
 </head>
 <body>
 <div class="header">
-        <div class="header-logo">
-            <h1>🌳 Sementes no Mapa</h1>
+    <div class="header-logo">
+        <h1>🌳 Sementes no Mapa</h1>
+    </div>
+
+    <div class="header-nav">
+        <a href="index.html">Início</a>
+        <a href="curiosidades.html">Curiosidades</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="contato.html">Contato</a>
+    </div>
+
+    <div class="auth-section">
+        <div class="auth-buttons" id="authButtons">
+            <button class="auth-button btn-login" onclick="openModal('loginModal')">Entrar</button>
+            <button class="auth-button btn-register" onclick="openModal('registerModal')">Criar Conta</button>
         </div>
-        <div class="header-nav">
-            <!-- Espaço para futuras páginas/navegação -->
-        </div>
-        <div class="auth-section">
-            <div class="auth-buttons" id="authButtons">
-                <button class="auth-button btn-login" onclick="openModal('loginModal')">Entrar</button>
-                <button class="auth-button btn-register" onclick="openModal('registerModal')">Criar Conta</button>
-            </div>
-            <div class="user-info" id="userInfo" style="display: none;">
-                <div class="user-avatar" id="userAvatar"></div>
-                <div class="user-name" id="userName"></div>
-                <button class="btn-logout" onclick="logout()">Sair</button>
-            </div>
+        <div class="user-info" id="userInfo" style="display: none;">
+            <div class="user-avatar" id="userAvatar"></div>
+            <div class="user-name" id="userName"></div>
+            <button class="btn-logout" onclick="logout()">Sair</button>
         </div>
     </div>
+</div>
+
 
     <div class="container">
         <div class="sidebar">
