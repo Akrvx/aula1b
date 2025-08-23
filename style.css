@@ -31,9 +31,11 @@ body {
     margin: 0 auto;
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px 20px;
 }
+
 .header-logo {
     flex-shrink: 0;
 }
@@ -45,9 +47,10 @@ body {
     font-weight: 600;
 }
 
+/* Itens da nav (desktop) */
 .header-nav {
     display: flex;
-    gap: 0.6rem; /* menos espaço entre os links */
+    gap: 2rem; /* espaço entre os links */
 }
 
 .header-nav a {
@@ -77,6 +80,13 @@ body {
 .header-nav a:hover {
     color: #4CAF50;
 }
+
+/* Botões (desktop) */
+.header-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
 
 .header-content {
     flex: 1;
@@ -795,6 +805,34 @@ body {
 }
 
 /* Media Queries para Responsividade */
+
+/* 📱 Ajuste para telas menores (até 768px) */
+@media (max-width: 768px) {
+    .header > div {
+        flex-direction: column;   /* coloca logo, nav e botões em coluna */
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .header-nav {
+        flex-direction: column;   /* links ficam um embaixo do outro */
+        gap: 0.8rem;
+    }
+
+    .header-buttons {
+        flex-direction: row;      /* botões continuam lado a lado */
+        gap: 0.5rem;
+    }
+
+    .header img {
+        width: 35px; /* deixa o logo menor no celular */
+    }
+
+    .header h1 {
+        font-size: 1.2rem; /* reduz tamanho do título */
+        text-align: center;
+    }
+}
 
 /* Tablets grandes e laptops pequenos */
 @media (max-width: 1024px) {
