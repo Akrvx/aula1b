@@ -15,17 +15,16 @@ body {
 
 /* Navbar principal */
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* logo | nav centralizada | botões */
     align-items: center;
-    width: 100%;
     padding: 0.75rem 2rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    width: 100%;
     box-sizing: border-box;
 }
-
 .header > div {
     max-width: 1440px;
     margin: 0 auto;
@@ -46,9 +45,8 @@ body {
 }
 
 .header-nav {
-    flex: 1; /* ocupa o espaço do meio */
     display: flex;
-    justify-content: center; /* centraliza */
+    justify-content: center;
     gap: 2rem;
 }
 
