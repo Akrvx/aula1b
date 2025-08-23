@@ -807,11 +807,11 @@ body {
 /* Media Queries para Responsividade */
 
 /* 📱 Ajuste para telas menores (até 768px) */
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .header > div {
         flex-direction: column;   /* coloca logo, nav e botões em coluna */
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.6rem;
     }
 
     .header-nav {
@@ -821,7 +821,7 @@ body {
 
     .header-buttons {
         flex-direction: row;      /* botões continuam lado a lado */
-        gap: 0.4rem;
+        gap: 0.3rem;
     }
 
     .header img {
