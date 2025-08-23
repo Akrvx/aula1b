@@ -811,17 +811,17 @@ body {
     .header > div {
         flex-direction: column;   /* coloca logo, nav e botões em coluna */
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
     .header-nav {
         flex-direction: column;   /* links ficam um embaixo do outro */
-        gap: 0.8rem;
+        gap: 0.6rem;
     }
 
     .header-buttons {
         flex-direction: row;      /* botões continuam lado a lado */
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
     .header img {
@@ -829,7 +829,7 @@ body {
     }
 
     .header h1 {
-        font-size: 1rem; /* reduz tamanho do título */
+        font-size: 0.8rem; /* reduz tamanho do título */
         text-align: center;
     }
 }
