@@ -39,14 +39,40 @@ body {
 }
 
 .header-nav {
-    flex: 1;
     display: flex;
+    gap: 1.5rem; /* espaço entre links */
     justify-content: center;
     align-items: center;
-    /* Espaço reservado para futuras páginas/navegação */
+}
 
-} 
+.header-nav a {
+    color: #2d5a3d;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding: 0.25rem 0;
+    position: relative;
+}
 
+.header-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.header-nav a:hover::after {
+    width: 100%;
+}
+
+.header-nav a:hover {
+    color: #4CAF50;
+}
 
 .header-content {
     flex: 1;
