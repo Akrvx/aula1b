@@ -51,7 +51,7 @@ body {
     flex: 1; /* ocupa espaço entre logo e botões */
     display: flex;
     justify-content: center; /* centraliza os links */
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .header-nav a {
