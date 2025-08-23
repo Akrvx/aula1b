@@ -47,7 +47,6 @@ body {
 
 .header-nav {
     display: flex;
-    justify-content: center;
     gap: 1rem; /* menos espaço entre os links */
 }
 
