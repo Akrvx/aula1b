@@ -63,16 +63,10 @@
 
   /* BLOCOS MAIORES */
   .big{padding:26px}
-  .stats {
-    display: flex;
-    justify-content: center; /* centraliza horizontal */
-    gap: 20px; /* espaço entre os itens */
-    text-align: center; /* centraliza o texto dentro de cada bloco */
-  }
-
-  .stat {
-    font-size: 18px;
-  }
+  .stats{display:grid; gap:16px}
+  @media (min-width:700px){ .stats{grid-template-columns:repeat(4,1fr)} }
+  .stat{background:#fff; border-radius:16px; padding:18px; text-align:center; box-shadow:0 8px 18px rgba(0,0,0,.08)}
+  .stat b{display:block; font-size:28px; color:var(--verde)}
 
   /* GALERIA */
   .gallery{display:grid; gap:12px; grid-template-columns:repeat(2,1fr)}
