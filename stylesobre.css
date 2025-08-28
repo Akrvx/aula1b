@@ -65,7 +65,7 @@
   .big{padding:26px}
   .stats {
     display: flex;
-    justify-content: center; /* centraliza horizontalmente */
+    align-items: center; /* centraliza horizontalmente */
     align-items: center;     /* alinha os itens no centro vertical */
     gap: 32px;               /* espaço entre os itens */
     text-align: center;      /* centraliza o texto dentro de cada bloco */
