@@ -63,7 +63,7 @@
 
   /* BLOCOS MAIORES */
   .big{padding:26px}
-  .stats{display:grid; gap:16px}
+  .stats{display:flex; gap:16px}
   @media (min-width:700px){ .stats{grid-template-columns:repeat(4,1fr)} }
   .stat{background:#fff; border-radius:16px; padding:18px; text-align:center; box-shadow:0 8px 18px rgba(0,0,0,.08)}
   .stat b{display:block; font-size:28px; color:var(--verde)}
