@@ -75,3 +75,31 @@
     aspect-ratio: 4/3; background:#eaf4ec; border:2px dashed #b9d7be; border-radius:14px;
     display:grid; place-items:center; color:#7aa07f; font-weight:700;
   }
+
+  .memorias {
+    text-align: center; /* Centraliza título e descrição */
+    margin: 20px auto;
+  }
+  
+  .memorias-cards {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    gap: 15px; /* Espaço entre os quadradinhos */
+    flex-wrap: wrap; /* Quebra linha no mobile */
+    margin-top: 15px;
+  }
+  
+  .memorias-cards .card {
+    border: 2px dashed #6da96d;
+    border-radius: 10px;
+    padding: 15px 20px;
+    background-color: #f8fdf8;
+    font-weight: bold;
+    color: #3c6e3c;
+    transition: transform 0.2s ease;
+  }
+  
+  .memorias-cards .card:hover {
+    transform: scale(1.05); /* Efeito de destaque */
+    cursor: pointer;
+  }
