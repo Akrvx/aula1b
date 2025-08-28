@@ -44,16 +44,30 @@
   .hero p{max-width:900px; margin:0 auto; font-size:18px; opacity:.95}
 
   /* CONTAINER */
-  .container{width:min(1150px, 92%); margin:0 auto; padding:24px 0 64px}
-  .grid{display:grid; gap:18px}
-  @media (min-width:900px){ .grid-3{grid-template-columns:repeat(3,1fr)} .grid-2{grid-template-columns:repeat(2,1fr)} }
-
-  /* CARDS */
-  .card{
-    background:var(--card); border-radius:18px; padding:22px; box-shadow:0 10px 20px rgba(0,0,0,.08)
+  .container {
+    display: flex;
+    flex-wrap: wrap;        /* permite quebrar linha */
+    justify-content: center;
+    gap: 15px;              /* espaçamento entre os cards */
   }
-  .card h3{margin:0 0 8px; color:var(--verde)}
-  .muted{opacity:.9}
+  
+  .card {
+    flex: 1 1 calc(50% - 20px); /* padrão: 2 em 2 (50% da tela) */
+    min-width: 150px;
+    max-width: 250px;
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  /* Tela maior que 768px -> 4 colunas */
+  @media (min-width: 768px) {
+    .card {
+      flex: 1 1 calc(25% - 20px); /* 25% da largura -> 4 colunas */
+    }
+  }
 
   /* LINHA DO TEMPO */
   .timeline{position:relative; padding-left:18px}
