@@ -61,13 +61,6 @@
   .step{position:relative; margin-bottom:18px}
   .step:before{content:""; position:absolute; left:-2px; top:4px; width:12px; height:12px; background:var(--verde); border-radius:50%}
 
-  /* BLOCOS MAIORES */
-  .big{padding:26px}
-  .stats{display:grid; gap:16px}
-  @media (min-width:700px){ .stats{grid-template-columns:repeat(4,1fr)} }
-  .stat{background:#fff; border-radius:16px; padding:18px; text-align:center; box-shadow:0 8px 18px rgba(0,0,0,.08)}
-  .stat b{display:block; font-size:28px; color:var(--verde)}
-
   /* GALERIA */
   .gallery{display:grid; gap:12px; grid-template-columns:repeat(2,1fr)}
   @media (min-width:900px){ .gallery{grid-template-columns:repeat(4,1fr)} }
